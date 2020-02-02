@@ -18,14 +18,14 @@ public class MapParser {
     private List<Ship> ships;
     private final Scanner in;
 
-    public MapParser(File mapFile) throws ParserException {
+    public MapParser(File mapFile) throws ParserBSException {
         this.map = null;
         this.ships = null;
         this.coords = null;
         try {
             in = new Scanner(new BufferedReader(new FileReader(mapFile)));
         } catch (FileNotFoundException e) {
-            throw new ParserException("Cannot open map file", e);
+            throw new ParserBSException("Cannot open map file", e);
         }
     }
 

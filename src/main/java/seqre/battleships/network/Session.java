@@ -3,7 +3,7 @@ package seqre.battleships.network;
 import seqre.battleships.game.GameState;
 import seqre.battleships.game.GameStatus;
 import seqre.battleships.game.map.MapParser;
-import seqre.battleships.game.map.ParserException;
+import seqre.battleships.game.map.ParserBSException;
 
 import java.io.*;
 import java.net.Socket;
@@ -18,7 +18,7 @@ public class Session implements Runnable {
     private int lastY;
     private int i = 0;
 
-    public Session(Socket socket, InstanceType mode, File mapFile) throws IOException, ParserException {
+    public Session(Socket socket, InstanceType mode, File mapFile) throws IOException, ParserBSException {
         this.mode = mode;
         this.socket = socket;
         this.gameState = new GameState(new MapParser(mapFile));
@@ -43,7 +43,7 @@ public class Session implements Runnable {
                 send(receive(in.readLine()));
             }
         } catch (IOException e) {
-            (new NetException("Cannot initiate conversation", e)).printStackTrace();
+            (new NetBSException("Cannot initiate conversation", e)).printStackTrace();
             System.exit(-1);
         }
 
@@ -56,7 +56,7 @@ public class Session implements Runnable {
                 }
             }
         } catch (IOException e) {
-            (new NetException("Error during ongoing game", e)).printStackTrace();
+            (new NetBSException("Error during ongoing game", e)).printStackTrace();
         }
     }
 

@@ -1,6 +1,6 @@
 package seqre.battleships.network;
 
-import seqre.battleships.game.map.ParserException;
+import seqre.battleships.game.map.ParserBSException;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,11 +26,11 @@ public class Client implements Instance {
             session = new Session(socket, InstanceType.CLIENT, mapFile);
             innerThread = new Thread(session, "bsClient");
             innerThread.start();
-        } catch (ParserException e) {
+        } catch (ParserBSException e) {
             e.printStackTrace();
             System.exit(1);
         } catch (IOException e) {
-            (new NetException("Connectivity error", e)).printStackTrace();
+            (new NetBSException("Connectivity error", e)).printStackTrace();
             System.exit(1);
         }
     }

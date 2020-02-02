@@ -1,9 +1,9 @@
 package seqre.battleships;
 
-import seqre.battleships.commandline.CmdException;
+import seqre.battleships.commandline.CmdBSException;
 import seqre.battleships.commandline.CmdParser;
 import seqre.battleships.network.Instance;
-import seqre.battleships.network.NetException;
+import seqre.battleships.network.NetBSException;
 
 import java.io.File;
 
@@ -24,7 +24,7 @@ public class Main {
         try {
             cmdParser.parse();
             instance = Instance.getInstance(cmdParser.getInstanceType(), findAddress(), cmdParser.getPort());
-        } catch (CmdException | NetException e) {
+        } catch (CmdBSException | NetBSException e) {
             e.printStackTrace();
             System.exit(1);
         }

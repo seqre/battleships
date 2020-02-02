@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 public interface Instance {
-    static Instance getInstance(InstanceType instanceType, InetAddress inetAddress, int port) throws NetException {
+    static Instance getInstance(InstanceType instanceType, InetAddress inetAddress, int port) throws NetBSException {
         try {
             switch (instanceType) {
                 case CLIENT:
@@ -15,7 +15,7 @@ public interface Instance {
                     return new Cerver(inetAddress, port);
             }
         } catch (IOException e) {
-            throw new NetException("Trouble with creating instance", e);
+            throw new NetBSException("Trouble with creating instance", e);
         }
     }
 

@@ -14,10 +14,10 @@ public class CmdParser {
         this.args = args;
     }
 
-    public void parse() throws CmdException {
+    public void parse() throws CmdBSException {
         if (args.length != 6) {
             System.out.println("Proper usage: java BattleShips-1.0.jar -mode [server|client] -port N -map map-file");
-            throw new CmdException("Too less/many arguments");
+            throw new CmdBSException("Too less/many arguments");
         }
 
         for (int it = 0; it < args.length; it++) {
@@ -36,7 +36,7 @@ public class CmdParser {
                         break;
                 }
             } catch (IllegalArgumentException e) {
-                throw new CmdException("Wrong arguments", e);
+                throw new CmdBSException("Wrong arguments", e);
             }
         }
     }

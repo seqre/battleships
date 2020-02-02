@@ -4,7 +4,7 @@ import java.net.*;
 
 
 public class NetUtils {
-    public static InetAddress findAddress() throws NetException {
+    public static InetAddress findAddress() throws NetBSException {
         try {
 //            NetworkInterface.getNetworkInterfaces()
 //                    .asIterator()
@@ -18,7 +18,7 @@ public class NetUtils {
                     .findFirst()
                     .orElse(InetAddress.getLocalHost());
         } catch (SocketException | UnknownHostException e) {
-            throw new NetException("Error during obtaining address", e);
+            throw new NetBSException("Error during obtaining address", e);
         }
     }
 }
