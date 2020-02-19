@@ -45,4 +45,8 @@ public class Ship {
     public ArrayList<ShipCell> getShipCells() {
         return shipCells;
     }
+
+    public ShipType getShipType() {
+        return shipType;
+    }
 }

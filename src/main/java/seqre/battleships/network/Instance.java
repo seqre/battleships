@@ -12,7 +12,7 @@ public interface Instance {
                     return new Client(inetAddress, port);
                 case SERVER:
                 default:
-                    return new Cerver(inetAddress, port);
+                    return new Server(inetAddress, port);
             }
         } catch (IOException e) {
             throw new NetBSException("Trouble with creating instance", e);

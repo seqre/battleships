@@ -34,6 +34,9 @@ public class CmdParser {
                     case "-map":
                         mapPath = Path.of(args[++it]);
                         break;
+
+                    default:
+                        throw new CmdBSException("Wrong arguments");
                 }
             } catch (IllegalArgumentException e) {
                 throw new CmdBSException("Wrong arguments", e);

@@ -4,12 +4,15 @@ import seqre.battleships.game.cell.Cell;
 import seqre.battleships.game.cell.CellType;
 import seqre.battleships.game.ship.Ship;
 import seqre.battleships.game.ship.ShipCell;
+import seqre.battleships.game.ship.ShipType;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MapParser {
     private java.util.Map<Character, ArrayList<Cell>> map;
@@ -63,7 +66,13 @@ public class MapParser {
         int n = coords.size();
         while (n > 0) {
             findShips(coords.get(0));
+            System.out.println(n);
             n = coords.size();
+        }
+
+        if (!checkShips()) {
+            System.out.println("Wrongly positioned ships");
+            System.exit(-1);
         }
     }
 
@@ -117,6 +126,16 @@ public class MapParser {
             map.computeIfAbsent(pair.x, ArrayList::new).add(Math.min(pair.y, map.get(pair.x).size()), new Cell(pair.x, pair.y, CellType.EMPTY));
             coords.remove(pair);
         }
+    }
+
+    private boolean checkShips() {
+        java.util.Map<ShipType, Long> counter = ships.stream()
+                .collect(Collectors.groupingBy(Ship::getShipType, Collectors.counting()));
+
+        return  counter.get(ShipType.SMALL) == 4 &&
+                counter.get(ShipType.MEDIUM) == 3 &&
+                counter.get(ShipType.BIG) == 2 &&
+                counter.get(ShipType.VAST) == 1;
     }
 
     private static class Pair {

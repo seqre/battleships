@@ -22,7 +22,7 @@ public class Client implements Instance {
     public void play(File mapFile) {
         try {
             System.out.println("Client started");
-            Socket socket = new Socket("10.60.244.227", port);
+            Socket socket = new Socket("10.136.98.112", port);
             session = new Session(socket, InstanceType.CLIENT, mapFile);
             innerThread = new Thread(session, "bsClient");
             innerThread.start();

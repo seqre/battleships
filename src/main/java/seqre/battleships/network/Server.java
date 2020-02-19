@@ -8,12 +8,12 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Cerver implements Instance {
+public class Server implements Instance {
     private final ServerSocket serverSocket;
     private Session session;
     private Thread innerThread;
 
-    public Cerver(InetAddress inetAddress, int port) throws IOException {
+    public Server(InetAddress inetAddress, int port) throws IOException {
         this.serverSocket = new ServerSocket(port, 1, inetAddress);
     }
 
