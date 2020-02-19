@@ -33,9 +33,9 @@ public class Ship {
     }
 
     public void checkStatus() {
-        long count = shipCells.stream().filter(cell -> cell.getCellType() == CellType.HIT).count();
+        long count = shipCells.stream().filter(cell -> cell.getCell().getCellType() == CellType.HIT).count();
 
-        if (count == shipCells.size()) {
+        if (count == shipType.getSize()) {
             shipStatus = ShipStatus.DESTROYED;
         } else if (count > 0) {
             shipStatus = ShipStatus.DAMAGED;

@@ -3,17 +3,26 @@ package seqre.battleships.game.ship;
 import seqre.battleships.game.cell.Cell;
 import seqre.battleships.game.cell.CellType;
 
-public class ShipCell extends Cell {
+public class ShipCell {
     private Ship ship;
+    private Cell cell;
 
-    public ShipCell(Character x, int y, Ship ship) {
-        super(x, y, CellType.SHIP);
+    public ShipCell(Ship ship, Cell cell) {
         this.ship = ship;
+        this.cell = cell;
     }
 
     public void destroy() {
-        cellType = CellType.HIT;
+        cell.setCellType(CellType.HIT);
         ship.checkStatus();
+    }
+
+    public Cell getCell() {
+        return cell;
+    }
+
+    public void setCell(Cell cell) {
+        this.cell = cell;
     }
 
     public Ship getShip() {

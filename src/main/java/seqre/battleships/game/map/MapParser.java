@@ -86,17 +86,20 @@ public class MapParser {
             Stack<Pair> toVisit = new Stack<>();
             Stack<Pair> toInternalVisit = new Stack<>();
             Ship tempShip = new Ship();
-            ShipCell tempCell;
+            Cell tempCell;
+            ShipCell tempShipCell;
             Pair tempPair;
             Pair tempPairInternal;
 
             toVisit.add(pair);
             while (!toVisit.empty()) {
                 tempPair = toVisit.pop();
-                tempCell = new ShipCell(tempPair.x, tempPair.y, tempShip);
+                tempCell = new Cell(tempPair.x, tempPair.y, CellType.SHIP);
+                tempShipCell = new ShipCell(tempShip, tempCell);
+                tempCell.setShipCell(tempShipCell);
 
                 map.computeIfAbsent(tempPair.x, character -> new ArrayList<>(10)).add(Math.min(tempPair.y, map.get(tempPair.x).size()), tempCell);
-                tempShip.addCell(tempCell);
+                tempShip.addCell(tempShipCell);
 
                 toInternalVisit.add(new Pair((char) (tempPair.x + 1), tempPair.y));
                 toInternalVisit.add(new Pair((char) (tempPair.x - 1), tempPair.y));

@@ -63,8 +63,8 @@ public class GameState {
         i = i - 1;
         Cell cell = playerMap.getCell(ch, i);
 
-        if (cell instanceof ShipCell) {
-            ShipCell shipCell = (ShipCell) cell;
+        if (cell.getShipCell() != null) {
+            ShipCell shipCell = cell.getShipCell();
             shipCell.destroy();
 
             if (checkShips()) {

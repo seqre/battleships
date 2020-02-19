@@ -74,13 +74,13 @@ public class Map {
                 .forEach(Cell -> Cell.setCellType(CellType.EMPTY));
     }
 
-    private void changeToEmpty(ShipCell cell) {
+    private void changeToEmpty(ShipCell shipCell) {
         Stack<Pair> stack = new Stack<>();
 
         for (int i = -1; i <= 1; ++i) {
             for (int j = -1; j <= 1; ++j) {
                 if (i != 0 || j != 0) {
-                    stack.add(new Pair((char) (cell.getX() + i), cell.getY() + j));
+                    stack.add(new Pair((char) (shipCell.getCell().getX() + i), shipCell.getCell().getY() + j));
                 }
             }
         }
@@ -88,7 +88,7 @@ public class Map {
         Pair tempPair;
         while (!stack.empty()) {
             tempPair = stack.pop();
-            if (constrained(tempPair.x, tempPair.y) && cell.getCellType() == CellType.UNKNOWN) {
+            if (constrained(tempPair.x, tempPair.y) && shipCell.getCell().getCellType() == CellType.UNKNOWN) {
                 map.get(tempPair.x).get(tempPair.y).setCellType(CellType.EMPTY);
             }
         }
