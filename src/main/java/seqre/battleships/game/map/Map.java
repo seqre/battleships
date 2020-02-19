@@ -6,10 +6,7 @@ import seqre.battleships.game.ship.Ship;
 import seqre.battleships.game.ship.ShipCell;
 import seqre.battleships.network.Protocol;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Map {
     private java.util.Map<Character, ArrayList<Cell>> map;
@@ -80,6 +77,7 @@ public class Map {
     }
 
     private void changeToEmpty(ShipCell cell) {
+
         if (constrained((char) (cell.getX() + 1), cell.getY() + 1) && cell.getCellType() == CellType.UNKNOWN) {
             map.get((char) (cell.getX() + 1)).get(cell.getY() + 1).setCellType(CellType.EMPTY);
         }

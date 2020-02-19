@@ -10,7 +10,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -132,28 +131,5 @@ public class MapParser {
                 counter.get(ShipType.MEDIUM) == 3 &&
                 counter.get(ShipType.BIG) == 2 &&
                 counter.get(ShipType.VAST) == 1;
-    }
-
-    private static class Pair {
-        Character x;
-        int y;
-
-        public Pair(Character i, int j) {
-            this.x = i;
-            this.y = j;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + x.toString() + "," + y + "]";
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof Pair) {
-                Pair temp = (Pair) obj;
-                return x == temp.x && y == temp.y;
-            } else return false;
-        }
     }
 }
