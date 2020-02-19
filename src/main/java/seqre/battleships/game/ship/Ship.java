@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Ship {
     private ShipType shipType;
     private ShipStatus shipStatus;
-    private ArrayList<ShipCell> shipCells;
+    private final ArrayList<ShipCell> shipCells;
 
     public Ship() {
         this.shipType = null;

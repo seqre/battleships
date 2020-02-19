@@ -6,14 +6,14 @@ import seqre.battleships.game.ship.Ship;
 import seqre.battleships.game.ship.ShipCell;
 import seqre.battleships.game.ship.ShipType;
 
-import static seqre.battleships.game.map.Pair.constrained;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static seqre.battleships.game.map.Pair.constrained;
 
 public class MapParser {
     private java.util.Map<Character, ArrayList<Cell>> map;
@@ -81,7 +81,7 @@ public class MapParser {
     }
 
     private void findShips(Pair pair) {
-        if (enumMap.get(pair.x).get(pair.y) == CellType.SHIP) {
+        if (enumMap.get(pair.getX()).get(pair.getY()) == CellType.SHIP) {
             List<Pair> visited = new ArrayList<>();
             Stack<Pair> toVisit = new Stack<>();
             Stack<Pair> toInternalVisit = new Stack<>();
@@ -94,23 +94,23 @@ public class MapParser {
             toVisit.add(pair);
             while (!toVisit.empty()) {
                 tempPair = toVisit.pop();
-                tempCell = new Cell(tempPair.x, tempPair.y, CellType.SHIP);
+                tempCell = new Cell(tempPair.getX(), tempPair.getY(), CellType.SHIP);
                 tempShipCell = new ShipCell(tempShip, tempCell);
                 tempCell.setShipCell(tempShipCell);
 
-                map.computeIfAbsent(tempPair.x, character -> new ArrayList<>(10)).add(Math.min(tempPair.y, map.get(tempPair.x).size()), tempCell);
+                map.computeIfAbsent(tempPair.getX(), character -> new ArrayList<>(10)).add(Math.min(tempPair.getY(), map.get(tempPair.getX()).size()), tempCell);
                 tempShip.addCell(tempShipCell);
 
-                toInternalVisit.add(new Pair((char) (tempPair.x + 1), tempPair.y));
-                toInternalVisit.add(new Pair((char) (tempPair.x - 1), tempPair.y));
-                toInternalVisit.add(new Pair(tempPair.x, tempPair.y + 1));
-                toInternalVisit.add(new Pair(tempPair.x, tempPair.y - 1));
+                toInternalVisit.add(new Pair((char) (tempPair.getX() + 1), tempPair.getY()));
+                toInternalVisit.add(new Pair((char) (tempPair.getX() - 1), tempPair.getY()));
+                toInternalVisit.add(new Pair(tempPair.getX(), tempPair.getY() + 1));
+                toInternalVisit.add(new Pair(tempPair.getX(), tempPair.getY() - 1));
 
                 while (!toInternalVisit.empty()) {
                     tempPairInternal = toInternalVisit.pop();
                     try {
-                        if (constrained(tempPairInternal.x, tempPairInternal.y) &&
-                                enumMap.get(tempPairInternal.x).get(tempPairInternal.y) == CellType.SHIP) {
+                        if (constrained(tempPairInternal.getX(), tempPairInternal.getY()) &&
+                                enumMap.get(tempPairInternal.getX()).get(tempPairInternal.getY()) == CellType.SHIP) {
                             if (!visited.contains(tempPairInternal)) toVisit.add(tempPairInternal);
                         }
                     } catch (Exception ignored) {
@@ -124,7 +124,7 @@ public class MapParser {
             tempShip.setShipType();
             ships.add(tempShip);
         } else {
-            map.computeIfAbsent(pair.x, ArrayList::new).add(Math.min(pair.y, map.get(pair.x).size()), new Cell(pair.x, pair.y, CellType.EMPTY));
+            map.computeIfAbsent(pair.getX(), ArrayList::new).add(Math.min(pair.getY(), map.get(pair.getX()).size()), new Cell(pair.getX(), pair.getY(), CellType.EMPTY));
             coords.remove(pair);
         }
     }

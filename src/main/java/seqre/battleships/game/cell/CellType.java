@@ -7,7 +7,7 @@ public enum CellType {
     MISS('~'),
     HIT('@');
 
-    Character charRepresentation;
+    final Character charRepresentation;
 
     CellType(Character charRepresentation) {
         this.charRepresentation = charRepresentation;

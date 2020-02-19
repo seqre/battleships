@@ -7,7 +7,7 @@ public enum Protocol {
     DROWNED("trafiony zatopiony"),
     LAST("ostatni zatopiony");
 
-    private String protocolText;
+    private final String protocolText;
 
     Protocol(String protocolText) {
         this.protocolText = protocolText;

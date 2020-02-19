@@ -3,14 +3,10 @@ package seqre.battleships.game.cell;
 import seqre.battleships.game.ship.ShipCell;
 
 public class Cell {
-    private Character x;
-    private int y;
+    private final Character x;
+    private final int y;
     protected CellType cellType;
     private ShipCell shipCell;
-
-    public Cell() {
-        this.cellType = CellType.UNKNOWN;
-    }
 
     public Cell(Character x, int y, CellType cellType) {
         this.x = x;

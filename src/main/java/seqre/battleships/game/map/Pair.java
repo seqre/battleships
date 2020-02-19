@@ -1,12 +1,20 @@
 package seqre.battleships.game.map;
 
 public class Pair {
-    Character x;
-    int y;
+    private final Character x;
+    private final int y;
 
     public Pair(Character i, int j) {
         this.x = i;
         this.y = j;
+    }
+
+    public Character getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public static boolean constrained(char c, int i) {

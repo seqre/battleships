@@ -6,7 +6,7 @@ public enum ShipType {
     BIG(3),
     VAST(4);
 
-    private int size;
+    private final int size;
 
     ShipType(int size) {
         this.size = size;

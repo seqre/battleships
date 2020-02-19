@@ -6,12 +6,12 @@ import seqre.battleships.game.ship.Ship;
 import seqre.battleships.game.ship.ShipCell;
 import seqre.battleships.network.Protocol;
 
-import static seqre.battleships.game.map.Pair.constrained;
-
 import java.util.*;
 
+import static seqre.battleships.game.map.Pair.constrained;
+
 public class Map {
-    private java.util.Map<Character, ArrayList<Cell>> map;
+    private final java.util.Map<Character, ArrayList<Cell>> map;
 
     public Map() {
         this.map = new HashMap<>();
@@ -88,8 +88,8 @@ public class Map {
         Pair tempPair;
         while (!stack.empty()) {
             tempPair = stack.pop();
-            if (constrained(tempPair.x, tempPair.y) && shipCell.getCell().getCellType() == CellType.UNKNOWN) {
-                map.get(tempPair.x).get(tempPair.y).setCellType(CellType.EMPTY);
+            if (constrained(tempPair.getX(), tempPair.getY()) && shipCell.getCell().getCellType() == CellType.UNKNOWN) {
+                map.get(tempPair.getX()).get(tempPair.getY()).setCellType(CellType.EMPTY);
             }
         }
     }

@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Random;
 
 public class GameState {
-    private Map playerMap;
-    private Map enemyMap;
-    private List<Ship> ships;
+    private final Map playerMap;
+    private final Map enemyMap;
+    private final List<Ship> ships;
     private GameStatus gameStatus;
     private final Random random;
 
