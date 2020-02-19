@@ -6,6 +6,8 @@ import seqre.battleships.game.ship.Ship;
 import seqre.battleships.game.ship.ShipCell;
 import seqre.battleships.network.Protocol;
 
+import static seqre.battleships.game.map.Pair.constrained;
+
 import java.util.*;
 
 public class Map {
@@ -86,11 +88,8 @@ public class Map {
         Pair tempPair;
         while (!stack.empty()) {
             tempPair = stack.pop();
-            try {
-                if (cell.getCellType() == CellType.UNKNOWN) {
-                    map.get(tempPair.x).get(tempPair.y).setCellType(CellType.EMPTY);
-                }
-            } catch (Exception ignored) {
+            if (constrained(tempPair.x, tempPair.y) && cell.getCellType() == CellType.UNKNOWN) {
+                map.get(tempPair.x).get(tempPair.y).setCellType(CellType.EMPTY);
             }
         }
     }

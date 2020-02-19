@@ -6,6 +6,8 @@ import seqre.battleships.game.ship.Ship;
 import seqre.battleships.game.ship.ShipCell;
 import seqre.battleships.game.ship.ShipType;
 
+import static seqre.battleships.game.map.Pair.constrained;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -104,7 +106,8 @@ public class MapParser {
                 while (!toInternalVisit.empty()) {
                     tempPairInternal = toInternalVisit.pop();
                     try {
-                        if (enumMap.get(tempPairInternal.x).get(tempPairInternal.y) == CellType.SHIP) {
+                        if (constrained(tempPairInternal.x, tempPairInternal.y) &&
+                                enumMap.get(tempPairInternal.x).get(tempPairInternal.y) == CellType.SHIP) {
                             if (!visited.contains(tempPairInternal)) toVisit.add(tempPairInternal);
                         }
                     } catch (Exception ignored) {

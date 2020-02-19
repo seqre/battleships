@@ -9,6 +9,10 @@ public class Pair {
         this.y = j;
     }
 
+    public static boolean constrained(char c, int i) {
+        return 'A' <= c && c <= 'J' && 0 <= i && i <= 9;
+    }
+
     @Override
     public String toString() {
         return "[" + x.toString() + "," + y + "]";
