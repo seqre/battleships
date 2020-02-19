@@ -63,11 +63,8 @@ public class MapParser {
             }
         }
 
-        int n = coords.size();
-        while (n > 0) {
+        while (coords.size() > 0) {
             findShips(coords.get(0));
-            System.out.println(n);
-            n = coords.size();
         }
 
         if (!checkShips()) {
@@ -86,10 +83,11 @@ public class MapParser {
         if (enumMap.get(pair.x).get(pair.y) == CellType.SHIP) {
             List<Pair> visited = new ArrayList<>();
             Stack<Pair> toVisit = new Stack<>();
+            Stack<Pair> toInternalVisit = new Stack<>();
             Ship tempShip = new Ship();
             ShipCell tempCell;
             Pair tempPair;
-            Pair tempPair2;
+            Pair tempPairInternal;
 
             toVisit.add(pair);
             while (!toVisit.empty()) {
@@ -99,21 +97,19 @@ public class MapParser {
                 map.computeIfAbsent(tempPair.x, character -> new ArrayList<>(10)).add(Math.min(tempPair.y, map.get(tempPair.x).size()), tempCell);
                 tempShip.addCell(tempCell);
 
-                if (Pair.constrained((char) (tempPair.x + 1), tempPair.y) && enumMap.get((char) (tempPair.x + 1)).get(tempPair.y) == CellType.SHIP) {
-                    tempPair2 = new Pair((char) (tempPair.x + 1), tempPair.y);
-                    if (!visited.contains(tempPair2)) toVisit.add(tempPair2);
-                }
-                if (Pair.constrained((char) (tempPair.x - 1), tempPair.y) && enumMap.get((char) (tempPair.x - 1)).get(tempPair.y) == CellType.SHIP) {
-                    tempPair2 = new Pair((char) (tempPair.x - 1), tempPair.y);
-                    if (!visited.contains(tempPair2)) toVisit.add(tempPair2);
-                }
-                if (Pair.constrained(tempPair.x, tempPair.y - 1) && enumMap.get(tempPair.x).get(tempPair.y - 1) == CellType.SHIP) {
-                    tempPair2 = new Pair(tempPair.x, tempPair.y - 1);
-                    if (!visited.contains(tempPair2)) toVisit.add(tempPair2);
-                }
-                if (Pair.constrained(tempPair.x, tempPair.y + 1) && enumMap.get(tempPair.x).get(tempPair.y + 1) == CellType.SHIP) {
-                    tempPair2 = new Pair(tempPair.x, tempPair.y + 1);
-                    if (!visited.contains(tempPair2)) toVisit.add(tempPair2);
+                toInternalVisit.add(new Pair((char) (tempPair.x + 1), tempPair.y));
+                toInternalVisit.add(new Pair((char) (tempPair.x - 1), tempPair.y));
+                toInternalVisit.add(new Pair(tempPair.x, tempPair.y + 1));
+                toInternalVisit.add(new Pair(tempPair.x, tempPair.y - 1));
+
+                while (!toInternalVisit.empty()) {
+                    tempPairInternal = toInternalVisit.pop();
+                    try {
+                        if (enumMap.get(tempPairInternal.x).get(tempPairInternal.y) == CellType.SHIP) {
+                            if (!visited.contains(tempPairInternal)) toVisit.add(tempPairInternal);
+                        }
+                    } catch (Exception ignored) {
+                    }
                 }
 
                 visited.add(tempPair);
@@ -145,10 +141,6 @@ public class MapParser {
         public Pair(Character i, int j) {
             this.x = i;
             this.y = j;
-        }
-
-        public static boolean constrained(Character x, int y) {
-            return 'A' <= x && x <= 'J' && 0 <= y && y < 10;
         }
 
         @Override
