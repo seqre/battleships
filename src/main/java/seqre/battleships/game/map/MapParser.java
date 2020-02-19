@@ -10,9 +10,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static seqre.battleships.game.map.Pair.constrained;
 
 public class MapParser {
     private java.util.Map<Character, ArrayList<Cell>> map;
@@ -63,11 +64,8 @@ public class MapParser {
             }
         }
 
-        int n = coords.size();
-        while (n > 0) {
+        while (coords.size() > 0) {
             findShips(coords.get(0));
-            System.out.println(n);
-            n = coords.size();
         }
 
         if (!checkShips()) {
@@ -83,37 +81,40 @@ public class MapParser {
     }
 
     private void findShips(Pair pair) {
-        if (enumMap.get(pair.x).get(pair.y) == CellType.SHIP) {
+        if (enumMap.get(pair.getX()).get(pair.getY()) == CellType.SHIP) {
             List<Pair> visited = new ArrayList<>();
             Stack<Pair> toVisit = new Stack<>();
+            Stack<Pair> toInternalVisit = new Stack<>();
             Ship tempShip = new Ship();
-            ShipCell tempCell;
+            Cell tempCell;
+            ShipCell tempShipCell;
             Pair tempPair;
-            Pair tempPair2;
+            Pair tempPairInternal;
 
             toVisit.add(pair);
             while (!toVisit.empty()) {
                 tempPair = toVisit.pop();
-                tempCell = new ShipCell(tempPair.x, tempPair.y, tempShip);
+                tempCell = new Cell(tempPair.getX(), tempPair.getY(), CellType.SHIP);
+                tempShipCell = new ShipCell(tempShip, tempCell);
+                tempCell.setShipCell(tempShipCell);
 
-                map.computeIfAbsent(tempPair.x, character -> new ArrayList<>(10)).add(Math.min(tempPair.y, map.get(tempPair.x).size()), tempCell);
-                tempShip.addCell(tempCell);
+                map.computeIfAbsent(tempPair.getX(), character -> new ArrayList<>(10)).add(Math.min(tempPair.getY(), map.get(tempPair.getX()).size()), tempCell);
+                tempShip.addCell(tempShipCell);
 
-                if (Pair.constrained((char) (tempPair.x + 1), tempPair.y) && enumMap.get((char) (tempPair.x + 1)).get(tempPair.y) == CellType.SHIP) {
-                    tempPair2 = new Pair((char) (tempPair.x + 1), tempPair.y);
-                    if (!visited.contains(tempPair2)) toVisit.add(tempPair2);
-                }
-                if (Pair.constrained((char) (tempPair.x - 1), tempPair.y) && enumMap.get((char) (tempPair.x - 1)).get(tempPair.y) == CellType.SHIP) {
-                    tempPair2 = new Pair((char) (tempPair.x - 1), tempPair.y);
-                    if (!visited.contains(tempPair2)) toVisit.add(tempPair2);
-                }
-                if (Pair.constrained(tempPair.x, tempPair.y - 1) && enumMap.get(tempPair.x).get(tempPair.y - 1) == CellType.SHIP) {
-                    tempPair2 = new Pair(tempPair.x, tempPair.y - 1);
-                    if (!visited.contains(tempPair2)) toVisit.add(tempPair2);
-                }
-                if (Pair.constrained(tempPair.x, tempPair.y + 1) && enumMap.get(tempPair.x).get(tempPair.y + 1) == CellType.SHIP) {
-                    tempPair2 = new Pair(tempPair.x, tempPair.y + 1);
-                    if (!visited.contains(tempPair2)) toVisit.add(tempPair2);
+                toInternalVisit.add(new Pair((char) (tempPair.getX() + 1), tempPair.getY()));
+                toInternalVisit.add(new Pair((char) (tempPair.getX() - 1), tempPair.getY()));
+                toInternalVisit.add(new Pair(tempPair.getX(), tempPair.getY() + 1));
+                toInternalVisit.add(new Pair(tempPair.getX(), tempPair.getY() - 1));
+
+                while (!toInternalVisit.empty()) {
+                    tempPairInternal = toInternalVisit.pop();
+                    try {
+                        if (constrained(tempPairInternal.getX(), tempPairInternal.getY()) &&
+                                enumMap.get(tempPairInternal.getX()).get(tempPairInternal.getY()) == CellType.SHIP) {
+                            if (!visited.contains(tempPairInternal)) toVisit.add(tempPairInternal);
+                        }
+                    } catch (Exception ignored) {
+                    }
                 }
 
                 visited.add(tempPair);
@@ -123,7 +124,7 @@ public class MapParser {
             tempShip.setShipType();
             ships.add(tempShip);
         } else {
-            map.computeIfAbsent(pair.x, ArrayList::new).add(Math.min(pair.y, map.get(pair.x).size()), new Cell(pair.x, pair.y, CellType.EMPTY));
+            map.computeIfAbsent(pair.getX(), ArrayList::new).add(Math.min(pair.getY(), map.get(pair.getX()).size()), new Cell(pair.getX(), pair.getY(), CellType.EMPTY));
             coords.remove(pair);
         }
     }
@@ -136,32 +137,5 @@ public class MapParser {
                 counter.get(ShipType.MEDIUM) == 3 &&
                 counter.get(ShipType.BIG) == 2 &&
                 counter.get(ShipType.VAST) == 1;
-    }
-
-    private static class Pair {
-        Character x;
-        int y;
-
-        public Pair(Character i, int j) {
-            this.x = i;
-            this.y = j;
-        }
-
-        public static boolean constrained(Character x, int y) {
-            return 'A' <= x && x <= 'J' && 0 <= y && y < 10;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + x.toString() + "," + y + "]";
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof Pair) {
-                Pair temp = (Pair) obj;
-                return x == temp.x && y == temp.y;
-            } else return false;
-        }
     }
 }

@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Random;
 
 public class GameState {
-    private Map playerMap;
-    private Map enemyMap;
-    private List<Ship> ships;
+    private final Map playerMap;
+    private final Map enemyMap;
+    private final List<Ship> ships;
     private GameStatus gameStatus;
     private final Random random;
 
@@ -63,8 +63,8 @@ public class GameState {
         i = i - 1;
         Cell cell = playerMap.getCell(ch, i);
 
-        if (cell instanceof ShipCell) {
-            ShipCell shipCell = (ShipCell) cell;
+        if (cell.getShipCell() != null) {
+            ShipCell shipCell = cell.getShipCell();
             shipCell.destroy();
 
             if (checkShips()) {

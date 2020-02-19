@@ -5,7 +5,7 @@ import seqre.battleships.network.InstanceType;
 import java.nio.file.Path;
 
 public class CmdParser {
-    String[] args;
+    final String[] args;
     InstanceType instanceType;
     Integer port;
     Path mapPath;

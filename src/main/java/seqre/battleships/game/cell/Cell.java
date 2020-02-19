@@ -1,13 +1,12 @@
 package seqre.battleships.game.cell;
 
-public class Cell {
-    private Character x;
-    private int y;
-    protected CellType cellType;
+import seqre.battleships.game.ship.ShipCell;
 
-    public Cell() {
-        this.cellType = CellType.UNKNOWN;
-    }
+public class Cell {
+    private final Character x;
+    private final int y;
+    protected CellType cellType;
+    private ShipCell shipCell;
 
     public Cell(Character x, int y, CellType cellType) {
         this.x = x;
@@ -21,6 +20,14 @@ public class Cell {
 
     public void setCellType(CellType cellType) {
         this.cellType = cellType;
+    }
+
+    public ShipCell getShipCell() {
+        return shipCell;
+    }
+
+    public void setShipCell(ShipCell shipCell) {
+        this.shipCell = shipCell;
     }
 
     @Override

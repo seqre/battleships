@@ -16,7 +16,6 @@ public class Session implements Runnable {
     private GameState gameState;
     private Character lastX;
     private int lastY;
-    private int i = 0;
 
     public Session(Socket socket, InstanceType mode, File mapFile) throws IOException, ParserBSException {
         this.mode = mode;

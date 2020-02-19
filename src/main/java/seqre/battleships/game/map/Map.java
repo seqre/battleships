@@ -6,13 +6,12 @@ import seqre.battleships.game.ship.Ship;
 import seqre.battleships.game.ship.ShipCell;
 import seqre.battleships.network.Protocol;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
+import static seqre.battleships.game.map.Pair.constrained;
 
 public class Map {
-    private java.util.Map<Character, ArrayList<Cell>> map;
+    private final java.util.Map<Character, ArrayList<Cell>> map;
 
     public Map() {
         this.map = new HashMap<>();
@@ -75,34 +74,23 @@ public class Map {
                 .forEach(Cell -> Cell.setCellType(CellType.EMPTY));
     }
 
-    public static boolean constrained(Character x, int y) {
-        return 'A' <= x && x <= 'J' && 0 <= y && y < 10;
-    }
+    private void changeToEmpty(ShipCell shipCell) {
+        Stack<Pair> stack = new Stack<>();
 
-    private void changeToEmpty(ShipCell cell) {
-        if (constrained((char) (cell.getX() + 1), cell.getY() + 1) && cell.getCellType() == CellType.UNKNOWN) {
-            map.get((char) (cell.getX() + 1)).get(cell.getY() + 1).setCellType(CellType.EMPTY);
+        for (int i = -1; i <= 1; ++i) {
+            for (int j = -1; j <= 1; ++j) {
+                if (i != 0 || j != 0) {
+                    stack.add(new Pair((char) (shipCell.getCell().getX() + i), shipCell.getCell().getY() + j));
+                }
+            }
         }
-        if (constrained((char) (cell.getX() + 1), cell.getY()) && cell.getCellType() == CellType.UNKNOWN) {
-            map.get((char) (cell.getX() + 1)).get(cell.getY()).setCellType(CellType.EMPTY);
-        }
-        if (constrained((char) (cell.getX() + 1), cell.getY() - 1) && cell.getCellType() == CellType.UNKNOWN) {
-            map.get((char) (cell.getX() + 1)).get(cell.getY() - 1).setCellType(CellType.EMPTY);
-        }
-        if (constrained(cell.getX(), cell.getY() + 1) && cell.getCellType() == CellType.UNKNOWN) {
-            map.get(cell.getX()).get(cell.getY() + 1).setCellType(CellType.EMPTY);
-        }
-        if (constrained(cell.getX(), cell.getY() - 1) && cell.getCellType() == CellType.UNKNOWN) {
-            map.get(cell.getX()).get(cell.getY() - 1).setCellType(CellType.EMPTY);
-        }
-        if (constrained((char) (cell.getX() - 1), cell.getY() + 1) && cell.getCellType() == CellType.UNKNOWN) {
-            map.get(cell.getX()).get(cell.getY() + 1).setCellType(CellType.EMPTY);
-        }
-        if (constrained((char) (cell.getX() - 1), cell.getY()) && cell.getCellType() == CellType.UNKNOWN) {
-            map.get(cell.getX()).get(cell.getY()).setCellType(CellType.EMPTY);
-        }
-        if (constrained((char) (cell.getX() - 1), cell.getY() - 1) && cell.getCellType() == CellType.UNKNOWN) {
-            map.get(cell.getX()).get(cell.getY() - 1).setCellType(CellType.EMPTY);
+
+        Pair tempPair;
+        while (!stack.empty()) {
+            tempPair = stack.pop();
+            if (constrained(tempPair.getX(), tempPair.getY()) && shipCell.getCell().getCellType() == CellType.UNKNOWN) {
+                map.get(tempPair.getX()).get(tempPair.getY()).setCellType(CellType.EMPTY);
+            }
         }
     }
 }
