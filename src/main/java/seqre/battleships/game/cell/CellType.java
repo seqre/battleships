@@ -1,5 +1,7 @@
 package seqre.battleships.game.cell;
 
+//TODO: Maybe some config file / interface?
+
 public enum CellType {
     UNKNOWN('?'),
     SHIP('#'),

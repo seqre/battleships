@@ -8,6 +8,8 @@ import seqre.battleships.game.map.ParserBSException;
 import java.io.*;
 import java.net.Socket;
 
+//TODO: Refactor
+
 public class Session implements Runnable {
     private final InstanceType mode;
     private final Socket socket;

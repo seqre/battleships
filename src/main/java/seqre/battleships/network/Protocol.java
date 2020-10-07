@@ -1,5 +1,7 @@
 package seqre.battleships.network;
 
+//TODO: Translate to english / binary/hex?
+
 public enum Protocol {
     START("start"),
     MISS("pudło"),

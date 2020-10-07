@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 
+//TODO: Rethink that
+
 public interface Instance {
     static Instance getInstance(InstanceType instanceType, InetAddress inetAddress, int port) throws NetBSException {
         try {

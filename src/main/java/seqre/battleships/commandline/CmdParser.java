@@ -4,6 +4,8 @@ import seqre.battleships.network.InstanceType;
 
 import java.nio.file.Path;
 
+//TODO: Use library for that
+
 public class CmdParser {
     final String[] args;
     InstanceType instanceType;

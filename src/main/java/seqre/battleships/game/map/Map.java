@@ -10,6 +10,8 @@ import java.util.*;
 
 import static seqre.battleships.game.map.Pair.constrained;
 
+//TODO: Refactor?
+
 public class Map {
     private final java.util.Map<Character, ArrayList<Cell>> map;
 

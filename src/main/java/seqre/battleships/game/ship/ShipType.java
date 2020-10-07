@@ -16,6 +16,8 @@ public enum ShipType {
         return size;
     }
 
+    //TODO: Use stream
+
     public static ShipType getTypeFromSize(int size) {
         switch (size) {
             case 1:

@@ -21,6 +21,7 @@ public class Client implements Instance {
     @Override
     public void play(File mapFile) {
         try {
+            //TODO: Unhardcode that
             System.out.println("Client started");
             Socket socket = new Socket("10.136.98.112", port);
             session = new Session(socket, InstanceType.CLIENT, mapFile);

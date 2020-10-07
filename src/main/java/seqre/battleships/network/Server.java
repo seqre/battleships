@@ -17,6 +17,8 @@ public class Server implements Instance {
         this.serverSocket = new ServerSocket(port, 1, inetAddress);
     }
 
+    //TODO: Use proper logging
+
     @Override
     public void play(File mapFile) {
         try {

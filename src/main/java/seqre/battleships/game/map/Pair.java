@@ -26,6 +26,8 @@ public class Pair {
         return "[" + x.toString() + "," + y + "]";
     }
 
+    //TODO: Use instanceof pattern
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Pair) {

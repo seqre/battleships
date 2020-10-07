@@ -4,6 +4,8 @@ import seqre.battleships.game.cell.CellType;
 
 import java.util.ArrayList;
 
+//TODO: Rethink
+
 public class Ship {
     private ShipType shipType;
     private ShipStatus shipStatus;

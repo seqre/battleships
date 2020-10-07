@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 import static seqre.battleships.game.map.Pair.constrained;
 
+//TODO: Refactor
+
 public class MapParser {
     private java.util.Map<Character, ArrayList<Cell>> map;
     private java.util.Map<Character, ArrayList<CellType>> enumMap;
