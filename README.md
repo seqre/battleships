@@ -1,28 +1,28 @@
-# battleships
+# Battleships
 
-Należy napisać aplikację do gry w okręty przez sieć.
+You have to write an application for playing ships over the network.
 
-Aplikacja łączy się z inną aplikacją, i rozgrywa partię gry w okręty.
+The application connects to another application, and plays the game of the ship.
 
-### Parametry uruchomieniowe
-Aplikacja obługuje następujące parametry:
-* `-mode [server|client]` - wskazuje tryb działania (jako serwer - przyjmuje połączenie, jako klient - nawiązuje połączenie z serwerem)
-* `-port N` - port, na którym aplikacja ma się komunikować.
-* `-map map-file` - ścieżka do pliku zawierającego mapę z rozmieszczeniem statków (format opisany w sekcji Mapa).
+### Startup parameters
+The application supports the following parameters:
+* `-mode [server|client]` - indicates the mode of operation (as a server - accepts the connection, as a client - establishes a connection to the server)
+* `-port N` - the port which the application uses to communicate.
+* `-map map-file` - path to the file containing the map with the ship layout (format described in the Map section).
 
-### Mapa
-* Mapa jest planszą 10x10, zawierającą opis położenia okrętów.
-* `.` oznacza wodę, `#` oznacza okręt.
-* Wiersze oznacza się liczbami od 1 do 10 (z góry na dół), kolumny - literami od A do J (od lewej do prawej). 
-* Plansza powinna zawierać:
-  * 4 okręty o rozmiarze 1, 
-  * 3 okręty o rozmiarze 2,
-  * 2 okręty o rozmiarze 3,
-  * 1 okręt o rozmiarze 4.
-* Okręty o rozmiarach 3-4 mogą być "łamane", ale poszczególne segmenty muszą się łączyć przynajmniej jednym bokiem.
-* Dwa okręty nie mogą się ze sobą stykać (także na ukos).
+### Map
+* The map is a 10x10 chart, containing a description of the position of the ships.
+* `.` means water, `#` means ship.
+* Rows are marked with numbers from 1 to 10 (top to bottom), columns with letters A to J (left to right). 
+* The sheet should contain:
+  * 4 ships of size 1, 
+  * 3 ships of size 2,
+  * 2 ships of size 3,
+  * 1 ship size 4.
+* Ships of size 3-4 can be "broken", but the individual segments must connect with at least one side.
+* Two ships cannot contact each other (also diagonally).
 
-Przykładowa mapa poniżej:
+Example map below:
 ```
 ..#.......
 #......#..
@@ -35,51 +35,51 @@ Przykładowa mapa poniżej:
 .##....#.#
 .......#..
 ```
-Objaśnienie: na tej mapie, okręty 1-masztowe znajdują się na pozycjach: C1, H2, J7 oraz J9.
+Explanation: on this map, the 1-mast ships are in position: C1, H2, J7 and J9.
 
-### Protokół komunikacji
-* Komunikacja odbywa się z użyciem protokołu TCP, z kodowaniem UTF-8.
-* Klient i serwer wysyłają sobie na przemian _wiadomość_, która składa się z 2 części: _komendy_ i _współrzędnych_, odzielonych znakiem `;`, i zakończonych znakiem końca linii `\n`.
-  * Format wiadomości: `komenda;współrzędne\n`
-  * Przykład wiadomości: `pudło;D6\n`
-* Komendy i ich znaczenie:
+### Communication protocol
+* Communication is done using TCP protocol, with UTF-8 encoding.
+* The client and the server alternately send each other a _message_, which consists of 2 parts: _commands_ and _coordinates_, separated by a `;` character, and terminated by an end of line character `\n`.
+  * The message format: `command;coordinates\n`.
+  * Example of a message: `pudło;D6\n`.
+* Commands and their meaning:
   * _start_
-    * komenda inicjująca rozgrywkę. 
-    * Wysyła ją klient tylko raz, na początku.
-    * Przykład: `start;A1\n`
+    * command to initiate the game. 
+    * The client sends it only once, at the beginning.
+    * Example: `start;A1\n`.
   * _pudło_
-    * odpowiedź wysyłana, gdy pod współrzędnymi otzymanymi od drugiej strony nie znajduje się żaden okręt.
-    * Przykład: `pudło;A1\n`
+    * answer sent when there is no ship under the coordinates provided by the other side.
+    * Example: `pudło;A1\n`.
   * _trafiony_
-    * opowiedź wysyłana, gdy pod współrzędnymi otzymanymi od drugiej strony znajduje się okręt, i nie jest to jego ostatni dotychczas nie trafiony segment.
-    * Przykład: `trafiony;A1\n`
+    * the message sent when there is a ship under the coordinates provided from the other side, and this is not its last missed segment so far.
+    * Example: `trafiony;A1\n`.
   * _trafiony zatopiony_
-    * opowiedź wysyłana, gdy pod współrzędnymi otrzymanymi od drugiej strony znajduje się okręt, i trafiono ostatni jeszcze nie trafiony segment tego okrętu.
-    * Przykład: `trafiony zatopiony;A1\n`
+    * the story sent when there is a ship under the coordinates received from the other side, and the last missed segment of that ship was hit.
+    * Example: `trafiony zatopiony;A1\n`.
   * _ostatni zatopiony_
-    * opowiedź wysyłana, gdy pod współrzędnymi otrzymanymi od drugiej strony znajduje się okręt, i trafiono ostatni jeszcze nie trafiony segment okrętu całej floty w tej grze.
-    * Jest to ostatnia komenda w grze. Strona wysyłająca ją przegrywa.
-    * Przy tej komendzie nie podaje się współrzędnych strzału (już nie ma kto strzelać!). 
-    * Przykład: `ostatni zatopiony\n`
-* Możliwe (choć strategicznie nierozsądne) jest wielokrotne strzelanie w to samo miejsce. Należy wtedy odpowiadać zgodnie z aktualnym stanem planszy:
-  * `pudło` w razie pudła,
-  * `trafiony` gdy okręt już był trafiony w to miejsce, ale nie jest jeszcze zatopiony,
-  * `trafiony zatopiony` gdy okręt jest już zatopiony.
-* Obsługa błędów:
-  * W razie otrzymania niezrozumiałej komendy lub po 1 sekundzie oczekiwania, należy ponownie wysłać swoją ostatnią wiadomość. 
-  * Po 3 nieudanej próbie, należy wyświelić komunikat `Błąd komunikacji` i zakończyć działanie aplikacji.
+    * the story sent when there is a ship at the coordinates received from the other side, and the last missed ship segment of the entire fleet in this game was hit.
+    * This is the last command in the game. The sending side loses it.
+    * This command does not give the coordinates of the shot (there is no one to shoot anymore!). 
+    * Example: `ostatni zatopiony\n`.
+* It is possible (although strategically unreasonable) to shoot multiple times in the same place. You should then respond according to the current state of the board:
+  * `pudło` in case of a box,
+  * `trafiony`when the ship was already hit, but is not yet sunk,
+  * `trafiony zatopiony` when the ship is already sunk.
+* Error handling:
+  * If you receive an incomprehensible command or after 1 second of waiting, you must resend your last message. 
+  * After 3 unsuccessful attempts, you should display the message `Błąd komunikacji` and terminate the application.
 
-### Działanie aplikacji
-* Po uruchomieniu (w dowolnym trybie), aplikacja powinna wyświetlić swoją mapę.
-* W czasie działania, aplikacja powinna wyświetlać wszystkie wysyłane i otrzymywane wiadomości.
-* Po zakończeniu rozgrywki, aplikacja powinna wyświetlić:
-  * `Wygrana\n` w razie wygranej, lub `Przegrana\n` w razie przegranej,
-  * W razie wygranej - pełną mapę przeciwnika,
-  * W razie przegranej - mapę przeciwnika, z zastąpieniem nieznanych pól znakiem `?`. _Uwaga_: pola sąsiadujące z zatopionym okrętem należy uznać za odkryte (nie może się na nich znajdować inny okręt).
-  * Pusty wiersz
-  * Swoją mapę, z dodatkowymi oznaczeniami: `~` - pudła przeciwnika, `@` - celne strzały przeciwnika.
+### Application Operation
+* When started (in any mode), the application should display its map.
+* During operation, the application should display all sent and received messages.
+* After the game, the application should display:
+  * `Wygrana\n` in case of a win, or `Przegrana\n` in case of a loss,
+  * In case of a win - full map of the opponent,
+  * In case of a loss, the map of the opponent, with the replacement of unknown fields with the `?` character. _Note_: the fields adjacent to the sunken ship are to be considered uncovered (there must be no other ship on them).
+  * Blank line
+  * Your map, with additional markings: `~` - the opponent's boxes, `@` - the opponent's targeted shots.
 
-Przykład mapy przeciwnika z przegranej sesji:
+An example of an opponent's map from a lost session:
 ```
 ..#..??.?.
 #.????.#..
@@ -93,7 +93,7 @@ Przykład mapy przeciwnika z przegranej sesji:
 .......#..
 ```
 
-Przykład swojej mapy po grze (wygranej - nie wszytkie okręty zatopione):
+An example of your map after the game (winning - not all sunken ships):
 ```
 ~~@~~.~~~.
 @..~.~.@.~
@@ -105,3 +105,4 @@ Przykład swojej mapy po grze (wygranej - nie wszytkie okręty zatopione):
 ~.##.~.#~~
 .##~..~~~~
 ..~.~.~~~.
+```
